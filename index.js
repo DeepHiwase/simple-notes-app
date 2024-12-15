@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -8,10 +8,10 @@ app.use(express.static('dist'))
 app.use(cors())
 
 const requestLogger = (req, res, next) => {
-  console.log('Method:', req.method);
-  console.log('Path:  ', req.path);
-  console.log('Body:  ', req.body);
-  console.log('---');
+  console.log('Method:', req.method)
+  console.log('Path:  ', req.path)
+  console.log('Body:  ', req.body)
+  console.log('---')
   next()
 }
 
@@ -25,19 +25,20 @@ app.get('/api/notes', (request, response) => {
 })
 
 app.get('/api/notes/:id', (req, res, next) => {
-  Note.findById(req.params.id).then(note => {
-    if (note) {
-      res.json(note)
-    } else {
-      res.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+  Note.findById(req.params.id)
+    .then(note => {
+      if (note) {
+        res.json(note)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/notes/:id', (req, res, next) => {
   Note.findByIdAndDelete(req.params.id)
-    .then(result => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(error => next(error))
@@ -61,11 +62,7 @@ app.post('/api/notes', (req, res, next) => {
 
 app.put('/api/notes/:id', (req, res, next) => {
   const { content, important } = req.body
-  
-  Note.findByIdAndUpdate(req.params.id,
-      { content, important },
-      { new: true, runValidators: true, context: 'query' }
-    )
+  Note.findByIdAndUpdate(req.params.id, { content, important }, { new: true, runValidators: true, context: 'query' } )
     .then(updatedNote => {
       res.json(updatedNote)
     })
